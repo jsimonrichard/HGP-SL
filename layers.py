@@ -5,7 +5,8 @@ from sparse_softmax import Sparsemax
 from torch.nn import Parameter
 from torch_geometric.data import Data
 from torch_geometric.nn.conv import MessagePassing
-from torch_geometric.nn.pool.topk_pool import topk, filter_adj
+from torch_geometric.nn.pool.select.topk import topk
+from torch_geometric.nn.pool.connect.filter_edges import filter_adj
 from torch_geometric.utils import softmax, dense_to_sparse, add_remaining_self_loops
 from torch_scatter import scatter_add
 from torch_sparse import spspmm, coalesce
@@ -28,9 +29,7 @@ class TwoHopNeighborhood(object):
             value = value.view(-1, *[1 for _ in range(edge_attr.dim() - 1)])
             value = value.expand(-1, *list(edge_attr.size())[1:])
             edge_attr = torch.cat([edge_attr, value], dim=0)
-            data.edge_index, edge_attr = coalesce(edge_index, edge_attr, n, n, op='min', fill_value=fill)
-            edge_attr[edge_attr >= fill] = 0
-            data.edge_attr = edge_attr
+            data.edge_index, data.edge_attr = coalesce(edge_index, edge_attr, n, n, op='min')
 
         return data
 
