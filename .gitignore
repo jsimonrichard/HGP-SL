@@ -1,5 +1,6 @@
 hgpsl_venv/
-
+data/
+*.pth
 
 # https://github.com/github/gitignore/blob/main/Python.gitignore
 
