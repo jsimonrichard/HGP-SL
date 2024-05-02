@@ -31,8 +31,7 @@ class Model(torch.nn.Module):
         self.lin2 = torch.nn.Linear(self.nhid, self.nhid // 2)
         self.lin3 = torch.nn.Linear(self.nhid // 2, self.num_classes)
 
-    def forward(self, data):
-        x, edge_index, batch = data.x, data.edge_index, data.batch
+    def forward(self, x, edge_index, batch):
         edge_attr = None
 
         x = F.relu(self.conv1(x, edge_index, edge_attr))
